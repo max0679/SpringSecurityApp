@@ -1,5 +1,6 @@
 package ru.maslenikov.firstspringapp.services;
 
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.maslenikov.firstspringapp.models.User;
 import ru.maslenikov.firstspringapp.repositories.UserRepository;
@@ -14,7 +15,7 @@ public class UserService {
     }
 
     public User getUserByName(String name) {
-        return userRepository.findUserByName(name);
+        return userRepository.findUserByName(name).orElseThrow(() -> new UsernameNotFoundException("пользователь " + name + " не найден"));
     }
 
 }
