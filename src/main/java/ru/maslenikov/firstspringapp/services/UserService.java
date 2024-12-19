@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import ru.maslenikov.firstspringapp.models.User;
 import ru.maslenikov.firstspringapp.repositories.UserRepository;
 
+import java.util.Optional;
+
 @Service
 public class UserService {
 
@@ -14,8 +16,8 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public User getUserByName(String name) {
-        return userRepository.findUserByName(name).orElseThrow(() -> new UsernameNotFoundException("пользователь " + name + " не найден"));
+    public Optional<User> loadUserByName(String name) {
+        return userRepository.findUserByName(name);
     }
 
 }

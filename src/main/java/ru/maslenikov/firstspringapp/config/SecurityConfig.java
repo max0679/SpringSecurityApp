@@ -14,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import ru.maslenikov.firstspringapp.exceptions.CustomAuthenticationFailureHandler;
 import ru.maslenikov.firstspringapp.security.MyUserDetailsService;
 
 @Configuration
@@ -40,6 +41,8 @@ public class SecurityConfig {
         return provider;
     }
 
+
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
         return httpSecurity
@@ -47,7 +50,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                        // .requestMatchers("**").permitAll()
                         .requestMatchers("**").authenticated())
-                .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
+                .formLogin(form -> form
+                        .loginPage("/login") // указываем свою страницу входа
+                        .failureHandler(new CustomAuthenticationFailureHandler()) // Устанавливаем кастомный обработчик
+                        .permitAll()) // разрешаем всем доступ к форме входа)
+                //.formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
 
                 .build();
     }

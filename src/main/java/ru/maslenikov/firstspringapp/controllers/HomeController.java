@@ -1,9 +1,12 @@
 package ru.maslenikov.firstspringapp.controllers;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.maslenikov.firstspringapp.models.User;
+import ru.maslenikov.firstspringapp.security.MyUserDetails;
 import ru.maslenikov.firstspringapp.services.UserService;
 
 @Controller
@@ -18,7 +21,9 @@ public class HomeController {
 
     @GetMapping("")
     public String index() {
-        User user = userService.getUserByName("user2");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        MyUserDetails myUserDetails = (MyUserDetails) authentication.getPrincipal();
+        System.out.println(myUserDetails.getUser());
         return "home/index";
     }
 
