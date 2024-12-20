@@ -15,16 +15,17 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
                                         AuthenticationException exception) throws IOException, ServletException {
-        String errorMessage;
-
-        if (exception instanceof BadCredentialsException) {
-            errorMessage = "Неверный логин или пароль";
-        } else {
-            errorMessage = "Ошибка аутентификации: " + exception.getMessage();
-        }
-
-        // Устанавливаем сообщение об ошибке в сессию
-        request.getSession().setAttribute("errorMessage", errorMessage);
+//        String errorMessage;
+//
+//        if (exception instanceof BadCredentialsException) {
+//            errorMessage = "Неверный логин или пароль";
+//        } else {
+//            errorMessage = "Ошибка аутентификации: " + exception.getMessage();
+//        }
+//
+//        // Устанавливаем сообщение об ошибке в сессию
+//        request.getSession().setAttribute("errorMessage", errorMessage);
+//
         response.sendRedirect("/login?error=true");
     }
 }

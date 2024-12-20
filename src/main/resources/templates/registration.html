@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+<body>
+<h1>Login</h1>
+<form action="/registration" method="post" th:object="${user}">
+    <div>
+        <label for="name">Username:</label>
+        <input type="text" id="name" name="name" th:field="*{name}" th:value="${user.getName()}" required>
+        <div style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}" ></div>
+        <br/>
+    </div>
+    <div>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" th:field="*{password}" th:value="${user.getPassword()}" required>
+        <div style="color:red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+        <br/>
+    </div>
+    <div>
+        <label for="year">Год рождения:</label>
+        <input type="year" id="year" name="year" th:field="*{year}" th:value="${user.getYear()}" required>
+        <div style="color:red" th:if="${#fields.hasErrors('year')}" th:errors="*{year}"></div>
+        <br/>
+    </div>
+    <button type="submit">Регистрация</button>
+</form>
+
+
+<!-- Отображение сообщения об ошибке -->
+<!--<div th:if="${session.errorMessage}">-->
+<!--    <p th:text="${session.errorMessage}"></p>-->
+<!--</div>-->
+<div th:if="${param.error}">
+    <p>логин или пароль введены неверно</p>
+</div>
+
+</body>
+</html>

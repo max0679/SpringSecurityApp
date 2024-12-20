@@ -1,5 +1,6 @@
 package ru.maslenikov.firstspringapp.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -20,7 +21,7 @@ public class HomeController {
     }
 
     @GetMapping("")
-    public String index() {
+    public String index(HttpServletRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         MyUserDetails myUserDetails = (MyUserDetails) authentication.getPrincipal();
         System.out.println(myUserDetails.getUser());

@@ -20,4 +20,8 @@ public class UserService {
         return userRepository.findUserByName(name);
     }
 
+    public void saveUser(User user) {
+        userRepository.save(user);
+    }
+
 }
