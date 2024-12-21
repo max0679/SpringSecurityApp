@@ -3,8 +3,10 @@ package ru.maslenikov.firstspringapp.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -23,11 +25,9 @@ import ru.maslenikov.firstspringapp.security.MyUserDetailsService;
 @EnableMethodSecurity // прочитать
 public class SecurityConfig {
 
-    private final CustomAuthenticationProvider customAuthenticationProvider;
-
-    @Autowired
-    public SecurityConfig(CustomAuthenticationProvider customAuthenticationProvider) {
-        this.customAuthenticationProvider = customAuthenticationProvider;
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(5);
     }
 
     @Bean
@@ -36,16 +36,11 @@ public class SecurityConfig {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(5);
-    }
-
-    @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setUserDetailsService(userDetailsService());
-        provider.setPasswordEncoder(NoOpPasswordEncoder.getInstance()); // потом вернуть BCrypt
-        //provider.setPasswordEncoder(passwordEncoder()); // сейчас из-за этого, наверное, не выйдет
+        //provider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());
+        provider.setPasswordEncoder(passwordEncoder());
         return provider;
     }
 
@@ -58,21 +53,22 @@ public class SecurityConfig {
         // нужно использовать authenticationProvider
 
         // закомментировать эту строку, если хотим использовать стандартную аутентификацию
-        httpSecurity.authenticationProvider(customAuthenticationProvider);
+        httpSecurity.authenticationProvider(new CustomAuthenticationProvider(this));
 
-        return httpSecurity
+        httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                        // .requestMatchers("**").permitAll()
                         .requestMatchers("/login", "/registration").permitAll()
+                        .requestMatchers("/logout").authenticated()
                         .anyRequest().authenticated())
                 .formLogin(form -> form
                         .loginPage("/login") // указываем свою страницу входа
                         .failureHandler(new CustomAuthenticationFailureHandler()) // Устанавливаем кастомный обработчик
                         .permitAll()) // разрешаем всем доступ к форме входа)
-                //.formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
+                .logout().logoutUrl("/logout").logoutSuccessUrl("/login");
 
-                .build();
+       return httpSecurity.build();
     }
 
 }

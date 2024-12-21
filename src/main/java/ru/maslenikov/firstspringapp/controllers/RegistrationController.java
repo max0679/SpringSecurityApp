@@ -1,7 +1,9 @@
 package ru.maslenikov.firstspringapp.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,11 +18,13 @@ public class RegistrationController {
 
     private final UserService userService;
     private final UserValidator userValidator;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public RegistrationController(UserService userService, UserValidator userValidator) {
+    public RegistrationController(UserService userService, UserValidator userValidator, PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.userValidator = userValidator;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping("/registration")
@@ -29,7 +33,7 @@ public class RegistrationController {
     }
 
     @PostMapping("/registration")
-    public String registration(@ModelAttribute("user") @Valid User user, BindingResult bindingResult) {
+    public String registration(HttpServletRequest request, @ModelAttribute("user") @Valid User user, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors())
             return "registration";
@@ -39,7 +43,10 @@ public class RegistrationController {
         if (bindingResult.hasErrors())
             return "registration";
 
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
         userService.saveUser(user);
+        userService.authenticateUser(request, user); //не работает!!!
 
         return "redirect:/home";
     }
