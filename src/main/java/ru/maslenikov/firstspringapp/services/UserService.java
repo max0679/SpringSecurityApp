@@ -1,25 +1,23 @@
 package ru.maslenikov.firstspringapp.services;
 
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import ru.maslenikov.firstspringapp.models.User;
 import ru.maslenikov.firstspringapp.repositories.UserRepository;
-import ru.maslenikov.firstspringapp.security.MyUserDetails;
 
+import java.util.Collections;
 import java.util.Optional;
 
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
+    private final RoleService roleService;
     //private final AuthenticationManager authenticationManager;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, RoleService roleService) {
         this.userRepository = userRepository;
+        this.roleService = roleService;
     }
 
     public Optional<User> loadUserByName(String name) {
@@ -27,6 +25,7 @@ public class UserService {
     }
 
     public void saveUser(User user) {
+        user.setRoles(Collections.singleton(roleService.getRoleByName("ROLE_USER")));
         userRepository.save(user);
     }
 

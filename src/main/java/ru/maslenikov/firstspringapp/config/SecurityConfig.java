@@ -22,7 +22,7 @@ import ru.maslenikov.firstspringapp.security.MyUserDetailsService;
 
 @Configuration
 @EnableWebSecurity // конфигурационный класс SprintSecurity
-@EnableMethodSecurity // прочитать
+@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
     @Bean
@@ -59,14 +59,14 @@ public class SecurityConfig {
                 //.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                        // .requestMatchers("**").permitAll()
-                        .requestMatchers("/login", "/registration").permitAll()
-                        .requestMatchers("/logout").authenticated()
+                        .requestMatchers("/admin").hasRole("ADMIN")
+                        .requestMatchers("/login", "/registration").not().authenticated()
                         .anyRequest().authenticated())
                 .formLogin(form -> form
-                        .loginPage("/login") // указываем свою страницу входа
-                        .failureHandler(new CustomAuthenticationFailureHandler()) // Устанавливаем кастомный обработчик
-                        .permitAll()) // разрешаем всем доступ к форме входа)
-                .logout().logoutUrl("/logout").logoutSuccessUrl("/login");
+                        .loginPage("/login")
+                        .failureHandler(new CustomAuthenticationFailureHandler()) // устанавливаем кастомный обработчик
+                        )
+                .logout().logoutUrl("/logout").logoutSuccessUrl("/");
 
        return httpSecurity.build();
     }
