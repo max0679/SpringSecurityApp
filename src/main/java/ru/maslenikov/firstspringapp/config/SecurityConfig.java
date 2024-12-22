@@ -56,7 +56,7 @@ public class SecurityConfig {
         httpSecurity.authenticationProvider(new CustomAuthenticationProvider(this));
 
         httpSecurity
-                .csrf(AbstractHttpConfigurer::disable)
+                //.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                        // .requestMatchers("**").permitAll()
                         .requestMatchers("/login", "/registration").permitAll()

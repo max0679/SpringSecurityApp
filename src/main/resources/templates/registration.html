@@ -7,7 +7,7 @@
 </head>
 <body>
 <h1>Login</h1>
-<form action="/registration" method="post" th:object="${user}">
+<form  th:action="@{/registration}" th:method="post" th:object="${user}">
     <div>
         <label for="name">Username:</label>
         <input type="text" id="name" name="name" th:field="*{name}" th:value="${user.getName()}" required>

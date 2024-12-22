@@ -11,7 +11,7 @@ import ru.maslenikov.firstspringapp.security.MyUserDetails;
 import ru.maslenikov.firstspringapp.services.UserService;
 
 @Controller
-@RequestMapping("/home")
+@RequestMapping("")
 public class HomeController {
 
     private final UserService userService;
@@ -20,7 +20,7 @@ public class HomeController {
         this.userService = userService;
     }
 
-    @GetMapping("")
+    @GetMapping(value = {"", "/home", "/"})
     public String index(HttpServletRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         MyUserDetails myUserDetails = (MyUserDetails) authentication.getPrincipal();
