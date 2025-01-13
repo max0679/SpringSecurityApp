@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>ru.maslenikov</groupId>
-    <artifactId>FirstSpringApp</artifactId>
+    <artifactId>springjwttoken</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>FirstSpringApp</name>
-    <description>FirstSpringApp</description>
+    <name>springjwttoken</name>
+    <description>springjwttoken</description>
     <url/>
     <licenses>
         <license/>
@@ -75,6 +75,22 @@
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.modelmapper/modelmapper -->
+        <dependency>
+            <groupId>org.modelmapper</groupId>
+            <artifactId>modelmapper</artifactId>
+            <version>3.2.1</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.auth0/java-jwt -->
+        <dependency>
+            <groupId>com.auth0</groupId>
+            <artifactId>java-jwt</artifactId>
+            <version>4.4.0</version>
+        </dependency>
+
+
     </dependencies>
 
     <build>
