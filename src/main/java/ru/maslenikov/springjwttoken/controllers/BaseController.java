@@ -13,7 +13,7 @@ public class BaseController {
     @ExceptionHandler
     public ResponseEntity<BaseExceptionResponse> baseExceptionHandler(BaseException exception) {
         BaseExceptionResponse response = new BaseExceptionResponse(exception.getMessage());
-        return new ResponseEntity<BaseExceptionResponse>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
 

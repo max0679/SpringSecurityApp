@@ -22,7 +22,7 @@ public class JWTUtil {
     private String secret;
 
     // то храним в JWT-токене
-    private String generateToken(String username) {
+    public String generateToken(String username) {
 
         // срок хранения токена - от текущего момента 60 минут
         Date expirationDate = Date.from(ZonedDateTime.now().plusMinutes(60).toInstant());
